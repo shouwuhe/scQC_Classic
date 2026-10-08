@@ -7,7 +7,7 @@ version = "1.0.1"
 authors = ["shouwuhe"]
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/shouwuhe/scqc"
+repository = "https://github.com/shouwuhe/scQC_Distributed"
 
 [workspace.dependencies]
 sprs = "0.11"
