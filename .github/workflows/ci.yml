@@ -1,0 +1,68 @@
+# CI（SPEC §4.7）：三平台编译 + 测试 + 工程约定检查。
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  # CI 上不需要 .nosync 目录名
+  CARGO_TARGET_DIR: target
+
+jobs:
+  build-test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装 Rust（版本由 rust-toolchain.toml 锁定）
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: 格式检查
+        run: cargo fmt --all --check
+      - name: clippy -D warnings
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: scqc-core 必须可独立编译测试（SPEC §5 硬约束）
+        run: cargo test -p scqc-core
+      - name: 全部测试
+        run: cargo test --workspace
+      - name: 发布构建
+        run: cargo build --release -p scqc-engine
+      - name: verify 命令可运行
+        run: cargo run --release -p scqc-engine -- verify
+      - name: 上传引擎二进制
+        uses: actions/upload-artifact@v4
+        with:
+          name: scqc-engine-${{ matrix.os }}
+          path: |
+            target/release/scqc-engine
+            target/release/scqc-engine.exe
+          if-no-files-found: ignore
+
+  conventions:
+    name: 工程约定检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 算法目录不得出现平台名（SPEC §16：平台差异只能通过 PlatformProfile 表达）
+        run: |
+          set -e
+          if grep -rnE "scRNA|snRNA|Flex" crates/scqc-core/src/qc crates/scqc-core/src/ambient crates/scqc-core/src/doublet crates/scqc-core/src/embed 2>/dev/null; then
+            echo "::error::算法模块中出现了平台名字符串，请改为读取 PlatformProfile 字段"; exit 1
+          fi
+          echo "OK：算法目录无平台名"
+      - name: 引擎中除 progress.rs 外不得写 stdout（SPEC §10.2：stdout 只放 NDJSON）
+        run: |
+          set -e
+          if grep -rnP "\bprintln!|\bprint!\(|io::stdout" crates --include=*.rs | grep -v "crates/scqc-engine/src/progress.rs" ; then
+            echo "::error::发现直接写 stdout 的代码"; exit 1
+          fi
+          echo "OK：stdout 只由 progress.rs 写出"

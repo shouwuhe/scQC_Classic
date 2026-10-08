@@ -1,0 +1,3 @@
+# 仓库位于 iCloud Drive 中；编译产物目录用 .nosync 后缀，iCloud 会跳过同步。
+[build]
+target-dir = "target.nosync"

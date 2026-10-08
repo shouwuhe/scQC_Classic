@@ -1,0 +1,23 @@
+[package]
+name = "scqc-engine"
+description = "scQC 命令行引擎（子进程方式被界面调用，也可独立使用）"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "scqc-engine"
+path = "src/main.rs"
+
+[dependencies]
+scqc-core = { path = "../scqc-core" }
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+rayon.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[lints]
+workspace = true

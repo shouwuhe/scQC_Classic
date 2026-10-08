@@ -1,0 +1,118 @@
+{#-
+  一份完整报告正文。上下文里 `d` 是当前语言的文档：d.t 是文案表，d.data 是数值。
+
+  写作口径（SPEC §12）：读者是专业研究者，但不关心单细胞的技术细节，只关心结果。
+  所以先给结果，再给"删了什么、为什么"，最后才是样本来源与方法出处。
+  实现细节、许可证声明、参数逐条解释都不进报告——参数在第 8 节的 JSON 里，
+  许可证在界面的版权页里，逐簇阈值在 ddqc.json 里。
+
+  这个模板对三种语言共用，所以**模板里只能出现 ASCII 标点**：
+  全角括号、顿号、句号一旦写进模板，英文正文里就会冒出中日文标点。
+-#}
+{% set t = d.t %}{% set sample = d.data.sample %}{% set overview = d.data.overview %}
+{% set cell_calling = d.data.cell_calling %}{% set ambient = d.data.ambient %}{% set ddqc = d.data.ddqc %}
+{% set doublet = d.data.doublet %}{% set final_result = d.data.final_result %}{% set warnings = d.data.warnings %}
+
+<p class="toc">
+<a href="#{{ d.lang }}-s1">{{ t.toc1 }}</a><a href="#{{ d.lang }}-s2">{{ t.toc2 }}</a><a href="#{{ d.lang }}-s3">{{ t.toc3 }}</a><a href="#{{ d.lang }}-s4">{{ t.toc4 }}</a><a href="#{{ d.lang }}-s5">{{ t.toc5 }}</a><a href="#{{ d.lang }}-s6">{{ t.toc6 }}</a><a href="#{{ d.lang }}-s7">{{ t.toc7 }}</a><a href="#{{ d.lang }}-s8">{{ t.toc8 }}</a>
+</p>
+
+{% if warnings %}
+<div class="box warn"><strong>{{ d.warnings_title }}</strong>
+<ul>{% for w in warnings %}<li><span class="tag">{{ w.key }}</span>{{ w.value }}</li>{% endfor %}</ul></div>
+{% endif %}
+
+<h2 id="{{ d.lang }}-s1">{{ t.s1_title }}</h2>
+{{ final_result.waterfall_svg|safe }}
+<table class="kv">{% for kv in final_result.waterfall %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+<table class="kv">{% for kv in final_result.items %}<tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}</table>
+<p class="sub">{{ t.wf_ambient_note }}</p>
+
+<h2 id="{{ d.lang }}-s2">{{ t.s2_title }}</h2>
+<p>{{ cell_calling.mode }}</p>
+{{ overview.knee_svg|safe }}
+<table class="kv">{% for kv in cell_calling.items %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+{% if cell_calling.n_rescued > 0 %}
+<div class="box info"><strong>{{ d.cc_rescued_title }}</strong><br>{{ d.cc_rescued_body }}</div>
+{% endif %}
+{% if cell_calling.n_lost > 0 %}
+<div class="box warn">{{ d.cc_lost_body }}</div>
+{% endif %}
+
+<h2 id="{{ d.lang }}-s3">{{ t.s3_title }}</h2>
+<table class="kv">{% for kv in overview.stats %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+<div class="row">
+<div>{{ overview.umi_hist_svg|safe }}</div>
+<div>{{ overview.genes_hist_svg|safe }}</div>
+</div>
+<div class="row">
+<div>{{ overview.mito_hist_svg|safe }}</div>
+<div>{% if overview.ribo_hist_svg %}{{ overview.ribo_hist_svg|safe }}{% endif %}</div>
+</div>
+
+<h2 id="{{ d.lang }}-s4">{{ t.s4_title }}</h2>
+<h3>{{ t.sub_low_quality }}</h3>
+<p>{{ d.ddqc_dims_line }}</p>
+<table class="kv">{% for kv in ddqc.items %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+<table class="kv">{% for kv in ddqc.removed_by_dim %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+{% for n in ddqc.notes %}<p class="sub">{{ n }}</p>{% endfor %}
+<h3>{{ t.sub_doublets }}</h3>
+<table class="kv">{% for kv in doublet.items %}<tr><td>{{ kv.key }}</td><td class="num">{{ kv.value }}</td></tr>{% endfor %}</table>
+<p class="sub">{{ d.dbl_borderline_line }}</p>
+{% if doublet.per_sample|length > 1 %}
+<table><tr><th>{{ t.dbl_th_sample }}</th><th class="num">{{ t.dbl_th_cells_expected }}</th><th class="num">{{ t.dbl_th_calls }}</th><th class="num">{{ t.dbl_th_high_border_pk }}</th></tr>
+{% for r in doublet.per_sample %}<tr><td>{{ r.gene }}</td><td class="num">{{ r.a }}</td><td class="num">{{ r.b }}</td><td class="num">{{ r.c }}</td></tr>{% endfor %}</table>
+{% endif %}
+
+<h2 id="{{ d.lang }}-s5">{{ t.s5_title }}</h2>
+{% if not ambient.available %}
+<p class="sub">{{ ambient.skipped_reason }}</p>
+{% else %}
+<table>
+<tr><th>{{ t.amb_estimator }}</th><th class="num">{{ t.amb_rho }}</th><th>{{ t.amb_note }}</th></tr>
+{% for e in ambient.estimates %}<tr><td>{{ e.name }}</td><td class="num"><strong>{{ e.value }}</strong></td><td>{{ e.detail }}</td></tr>{% endfor %}
+</table>
+<div class="box {% if ambient.severe %}danger{% elif ambient.disagree %}warn{% else %}ok{% endif %}">
+<strong>{{ ambient.verdict }}</strong> &middot; <strong>{{ ambient.rating }}</strong> &middot; <strong>{{ ambient.correction_state }}</strong>
+{% if ambient.reason %}<br>{{ ambient.reason }}{% endif %}
+</div>
+<h3>{{ t.amb_top_genes_title }}</h3>
+<table><tr><th>{{ t.amb_gene }}</th><th class="num">{{ t.amb_observed }}</th><th class="num">{{ t.amb_expected }}</th><th class="num">{{ t.amb_share }}</th></tr>
+{% for g in ambient.top_genes %}<tr><td>{{ g.gene }}</td><td class="num">{{ g.a }}</td><td class="num">{{ g.b }}</td><td class="num">{{ g.c }}</td></tr>{% endfor %}</table>
+{% if ambient.correction %}
+<h3>{{ d.amb_corr_title }}</h3>
+{% if ambient.correction.forced %}<div class="box danger">{{ t.amb_corr_forced }}</div>{% endif %}
+<table class="kv">{% for kv in ambient.correction.items %}<tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}</table>
+<table><tr><th>{{ t.amb_gene }}</th><th class="num">{{ t.amb_corr_before }}</th><th class="num">{{ t.amb_corr_after }}</th><th class="num">{{ t.amb_corr_removed }}</th></tr>
+{% for g in ambient.correction.top_genes %}<tr><td>{{ g.gene }}</td><td class="num">{{ g.a }}</td><td class="num">{{ g.b }}</td><td class="num">{{ g.c }}</td></tr>{% endfor %}</table>
+{% else %}
+<p class="sub">{{ t.amb_no_correction }}</p>
+{% endif %}
+{% endif %}
+
+<h2 id="{{ d.lang }}-s6">{{ t.s6_title }}</h2>
+<table class="kv">
+<tr><td>{{ t.platform_type }}</td><td><strong>{{ sample.platform_label }}</strong> &middot; <span class="mono">{{ sample.platform_id }}</span>{% if sample.user_overrides %} &middot; {{ sample.user_overrides|join("; ") }}{% endif %}</td></tr>
+<tr><td>{{ t.species }}</td><td>{{ sample.species }}</td></tr>
+{% if sample.multiplex_n %}<tr><td>{{ t.multiplex_n }}</td><td class="num">{{ sample.multiplex_n }}</td></tr>{% endif %}
+<tr><td>{{ t.detection_evidence }}</td><td><ul>{% for ev in sample.evidence %}<li>{{ ev }}</li>{% endfor %}</ul></td></tr>
+<tr><td>{{ t.raw_barcodes }}</td><td class="num">{% if sample.n_raw_barcodes %}{{ sample.n_raw_barcodes|sep }}{% else %}{{ t.raw_not_provided }}{% endif %}</td></tr>
+<tr><td>{{ t.cellranger_cells }}</td><td class="num">{{ sample.n_cellranger_cells|sep }}</td></tr>
+<tr><td>{{ t.n_genes }}</td><td class="num">{{ sample.n_genes|sep }}</td></tr>
+{% for kv in sample.inputs %}<tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}
+<tr><td>{{ t.run_and_version }}</td><td>{{ d.run_line }}</td></tr>
+</table>
+{% if sample.caveats_platform %}
+<div class="box info"><strong>{{ t.platform_caveats }}</strong><ul>{% for c in sample.caveats_platform %}<li>{{ c }}</li>{% endfor %}</ul></div>
+{% endif %}
+
+<h2 id="{{ d.lang }}-s7">{{ t.s7_title }}</h2>
+<table><tr><th>{{ t.methods_step }}</th><th>{{ t.methods_citation }}</th></tr>
+{% for m in d.data.methods %}<tr><td>{{ m.name }}</td><td class="cite">{{ m.citation }}</td></tr>{% endfor %}</table>
+<h3>{{ t.global_limitations }}</h3>
+<ul class="sub">{% for l in d.data.limitations_global %}<li>{{ l }}</li>{% endfor %}</ul>
+
+<h2 id="{{ d.lang }}-s8">{{ t.s8_title }}</h2>
+<pre>{{ d.data.params_json }}</pre>
+
+<footer>{{ d.footer }}</footer>

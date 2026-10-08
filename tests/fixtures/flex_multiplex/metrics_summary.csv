@@ -1,0 +1,4 @@
+Category,Library Type,Grouped By,Group Name,Metric Name,Metric Value
+Library,Gene Expression,,,Chemistry,Flex
+Library,Gene Expression,,,Probe set name,Chromium_Human_Transcriptome_Probe_Set_v1.0.1_GRCh38-2020-A
+Cells,Gene Expression,Sample,S1,Cells,6

@@ -1,0 +1,12 @@
+{
+  "res": 1.3,
+  "mad": 2,
+  "dims": ["counts", "genes", "mito", "ribo"],
+  "n_genes_lower_bound": 200,
+  "percent_mito_upper_bound": 10,
+  "n_input": 2874,
+  "n_after_initial": 2848,
+  "n_kept": 2751,
+  "package": "ddqcR",
+  "version": "0.1.0"
+}

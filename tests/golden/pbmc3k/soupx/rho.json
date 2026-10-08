@@ -1,0 +1,15 @@
+{
+  "rho_global": 0.057,
+  "rho_low": 0.02,
+  "rho_high": 0.091,
+  "n_markers": 135,
+  "package": "SoupX",
+  "version": "1.6.2",
+  "params": {
+    "soup_umi_range": [0, 100],
+    "tfidfMin": 1,
+    "soupQuantile": 0.9,
+    "priorRho": 0.05,
+    "priorRhoStdDev": 0.1
+  }
+}

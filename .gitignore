@@ -1,0 +1,28 @@
+target/
+target.nosync/
+*.log
+.DS_Store
+tests/golden/**/*.mtx
+tests/golden/**/*.mtx.gz
+# 金标准的输入是 10x 公开数据（pbmc3k），由 scripts/golden/00_all.R 下载重建，不入库；
+# R 算出来的**对照结果**要入库——那才是金标准本身
+tests/golden/**/input/
+.agent/
+node_modules/
+dist/
+dist-electron/
+release/
+build/engine/
+build/resources/icon.icns
+
+# ---- 不发布到 GitHub 的内部材料 ----
+# 设计与进度文档：内部推理，不随代码发布
+SPEC.md
+DESIGN.md
+PROGRESS.md
+docs/
+# 本机的开发中转与启动器
+scripts/dev-agent.sh
+启动开发助手.command
+Rplots.pdf
+build/resources/icon.ico

@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+/* 设计令牌：一个克制的浅色主题，一个强调色。字号偏大，留白偏多——面向初学者。 */
+@theme {
+  --color-ink: oklch(0.22 0.02 250);
+  --color-ink-soft: oklch(0.48 0.02 250);
+  --color-ink-faint: oklch(0.62 0.015 250);
+  --color-line: oklch(0.91 0.006 250);
+  --color-surface: oklch(1 0 0);
+  --color-canvas: oklch(0.985 0.003 250);
+  --color-accent: oklch(0.55 0.19 265);
+  --color-accent-soft: oklch(0.96 0.03 265);
+  --color-good: oklch(0.62 0.14 155);
+  --color-good-soft: oklch(0.96 0.04 155);
+  --color-warn: oklch(0.72 0.15 70);
+  --color-warn-soft: oklch(0.97 0.05 75);
+  --color-bad: oklch(0.58 0.19 25);
+  --color-bad-soft: oklch(0.96 0.04 25);
+  --radius-card: 14px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans',
+    'Noto Sans CJK SC', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 数字一律等宽，方便逐行比对 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 标题栏留出 macOS 红绿灯的位置 */
+.titlebar-drag {
+  -webkit-app-region: drag;
+}
+.titlebar-nodrag {
+  -webkit-app-region: no-drag;
+}
+
+@keyframes scqc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-in {
+  animation: scqc-fade-in 0.18s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none;
+  }
+}

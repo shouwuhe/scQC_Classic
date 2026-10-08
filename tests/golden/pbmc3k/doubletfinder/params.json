@@ -1,0 +1,12 @@
+{
+  "pN": 0.25,
+  "pK": 0.02,
+  "expected_rate": 0.022008,
+  "nExp": 61,
+  "n_cells": 2751,
+  "seed": 20260911,
+  "self_jaccard_across_seeds": [0.605263157894737, 0.435294117647059, 0.435294117647059],
+  "self_pann_spearman_across_seeds": [0.64515372225299, 0.586198569620797, 0.607082572904272],
+  "package": "DoubletFinder",
+  "version": "2.0.6"
+}

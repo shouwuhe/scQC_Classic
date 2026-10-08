@@ -1,0 +1,137 @@
+{
+  "name": "scqc",
+  "version": "1.0.1",
+  "description": "Quality control for single-cell RNA-seq data from 10x Cell Ranger output",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "dist-electron/main/index.cjs",
+  "scripts": {
+    "dev:renderer": "vite",
+    "build:renderer": "vite build",
+    "build:electron": "node scripts/build-electron.mjs",
+    "build": "npm run typecheck && npm run licenses && npm run build:renderer && npm run build:electron",
+    "typecheck": "tsc --noEmit && npm run check:i18n && npm run check:scan",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write \"{src,electron,scripts}/**/*.{ts,tsx,mjs,css}\"",
+    "start": "npm run build && electron .",
+    "pack:mac-arm": "node scripts/pack-mac.mjs arm64",
+    "pack:mac-x64": "node scripts/pack-mac.mjs x64",
+    "check:i18n": "node --experimental-strip-types scripts/check-i18n.mjs",
+    "licenses": "node scripts/collect-licenses.mjs",
+    "check:scan": "node --experimental-strip-types scripts/check-scan.mts",
+    "pack:win-x64": "node scripts/pack-win.mjs"
+  },
+  "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.3",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-progress": "^1.1.2",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-slider": "^1.2.3",
+    "@radix-ui/react-switch": "^1.1.3",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.475.0",
+    "plotly.js-dist-min": "^2.35.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.6",
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.25.0",
+    "prettier": "^3.5.1",
+    "tailwindcss": "^4.0.6",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "@types/plotly.js-dist-min": "^2.3.4"
+  },
+  "build": {
+    "appId": "io.github.shouwuhe.scqc",
+    "productName": "scQC",
+    "copyright": "Copyright © 2026 shouwuhe",
+    "directories": {
+      "output": "release",
+      "buildResources": "build/resources"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/engine",
+        "to": "bin"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
+      "darkModeSupport": false,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "identity": null,
+      "extendInfo": {
+        "NSHumanReadableCopyright": "Copyright © 2026 shouwuhe"
+      },
+      "icon": "build/resources/icon.icns"
+    },
+    "dmg": {
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
+    },
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}",
+      "icon": "build/resources/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "scQC",
+      "artifactName": "${productName}-${version}-win-${arch}-setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-win-${arch}-portable.${ext}",
+      "unpackDirName": "scQC-${version}",
+      "requestExecutionLevel": "user"
+    }
+  },
+  "author": "shouwuhe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shouwuhe/scqc.git"
+  }
+}

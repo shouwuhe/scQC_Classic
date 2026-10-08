@@ -1,0 +1,7 @@
+{
+  "ntop": 500,
+  "binThresh": 0,
+  "n_cells": 2751,
+  "package": "scds",
+  "version": "1.22.0"
+}

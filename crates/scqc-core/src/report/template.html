@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="{{ primary_html_lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }} · scQC</title>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: -apple-system, "PingFang SC", "Hiragino Sans", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif; color: #222; background: #fafafa; margin: 0; padding: 24px; line-height: 1.55; }
+  main { max-width: 1040px; margin: 0 auto; background: #fff; padding: 32px 40px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #1f77b4; }
+  h3 { font-size: 15px; margin: 20px 0 8px; color: #333; }
+  .sub { color: #666; font-size: 13px; }
+  table { border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; width: 100%; }
+  th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #f3f6fa; font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .kv td:first-child { width: 34%; color: #555; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; }
+  .row > * { flex: 1 1 380px; }
+  .box { border: 1px solid #e3e3e3; border-radius: 6px; padding: 12px 14px; margin: 10px 0; background: #fcfcfc; }
+  .warn { border-left: 4px solid #ff7f0e; background: #fff8f0; }
+  .danger { border-left: 4px solid #d62728; background: #fff3f3; }
+  .ok { border-left: 4px solid #2ca02c; background: #f3fbf3; }
+  .info { border-left: 4px solid #1f77b4; background: #f2f7fc; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; background: #eef; color: #335; margin-right: 4px; }
+  ul { margin: 6px 0 6px 18px; padding: 0; }
+  li { margin: 2px 0; }
+  pre { background: #f6f8fa; padding: 10px; overflow: auto; font-size: 12px; border: 1px solid #e3e3e3; }
+  svg { max-width: 100%; height: auto; }
+  .method { margin: 14px 0; padding: 10px 14px; border: 1px solid #e6e6e6; border-radius: 6px; }
+  .method .cite { color: #555; font-size: 12.5px; }
+  .toc a { margin-right: 14px; color: #1f77b4; text-decoration: none; font-size: 13px; }
+  footer { margin-top: 36px; color: #777; font-size: 12px; }
+  /* 语言切换：无 JS 时两种语言都显示（PDF 打印即为双语） */
+  .langbar { margin: 0 0 18px; font-size: 13px; color: #555; }
+  .langbar button { font: inherit; margin-left: 6px; padding: 3px 12px; border: 1px solid #cfd6e0; background: #fff; border-radius: 999px; cursor: pointer; }
+  .langbar button[aria-pressed="true"] { background: #1f77b4; border-color: #1f77b4; color: #fff; }
+  .doc + .doc { margin-top: 48px; border-top: 3px double #d8dee6; padding-top: 8px; }
+  .doc-lang { display: inline-block; margin: 18px 0 -8px; padding: 2px 10px; border-radius: 999px; background: #eef2f7; color: #445; font-size: 12px; }
+  @media print { body { background: #fff; padding: 0; } main { box-shadow: none; padding: 0; } h2 { break-after: avoid; } .method, .box { break-inside: avoid; } .langbar { display: none; } .doc { display: block !important; } }
+</style>
+</head>
+<body>
+<main>
+<h1>{{ primary_report_title }} · {{ title }}</h1>
+<div class="sub">{{ primary_sub }}</div>
+
+{% if docs|length > 1 %}
+<p class="langbar" id="langbar">{{ primary_language }}:
+{% for d in docs %}<button type="button" data-lang="{{ d.lang }}" aria-pressed="false">{{ d.endonym }}</button>{% endfor %}
+<button type="button" data-lang="__both" aria-pressed="true">{{ primary_show_both }}</button>
+</p>
+{% endif %}
+
+{% for d in docs %}
+<section class="doc" data-lang="{{ d.lang }}" lang="{{ d.html_lang }}">
+{% if docs|length > 1 %}<span class="doc-lang">{{ d.endonym }}</span>{% endif %}
+{{ d.body|safe }}
+</section>
+{% endfor %}
+
+</main>
+{% if docs|length > 1 %}
+<script>
+(function () {
+  var bar = document.getElementById('langbar');
+  if (!bar) return;
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.doc'));
+  bar.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button');
+    if (!b) return;
+    var want = b.getAttribute('data-lang');
+    secs.forEach(function (s) {
+      s.style.display = want === '__both' || s.getAttribute('data-lang') === want ? '' : 'none';
+    });
+    Array.prototype.forEach.call(bar.querySelectorAll('button'), function (x) {
+      x.setAttribute('aria-pressed', String(x === b));
+    });
+  });
+})();
+</script>
+{% endif %}
+</body>
+</html>

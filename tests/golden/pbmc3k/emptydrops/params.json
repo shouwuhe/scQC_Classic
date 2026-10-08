@@ -1,0 +1,9 @@
+{
+  "lower": 100,
+  "niters": 10000,
+  "fdr": 0.01,
+  "seed": 20260911,
+  "package": "DropletUtils",
+  "version": "1.26.0",
+  "knee": 1610
+}

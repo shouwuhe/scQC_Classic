@@ -1,0 +1,28 @@
+[package]
+name = "scqc-core"
+description = "scQC 纯算法库：单细胞 QC 引擎核心（无 UI 依赖）"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+csv.workspace = true
+flate2.workspace = true
+thiserror.workspace = true
+rayon.workspace = true
+statrs.workspace = true
+hnsw_rs.workspace = true
+tracing.workspace = true
+sysinfo.workspace = true
+sha2.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+minijinja.workspace = true
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints]
+workspace = true

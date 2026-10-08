@@ -1,0 +1,242 @@
+{
+ "en": {
+  "git_hash": "demo",
+  "lang": "en",
+  "limitations_global": [
+   "QC has no gold standard and threshold choices are subjective. This report gives the basis for every step and the reason each cell was removed, so the choices can be reviewed.",
+   "Ambient RNA correction biases expression (highly expressed genes are corrected more strongly). The two estimators model different things, so disagreement has several possible causes.",
+   "DecontX is conservative for similar populations, calls most housekeeping genes native, and is sensitive to clustering granularity.",
+   "There is no consensus method for estimating the doublet rate; the multiplexed-Flex adjustment is heuristic.",
+   "The Flex assay has no ambient RNA reference range, and its probe set excludes ribosomal protein, ncRNA, TCR/IG and HLA/KIR genes, so its feature universe differs from whole-transcriptome gene expression."
+  ],
+  "methods": [
+   {
+    "citation": "Lun ATL et al. (2019) EmptyDrops: distinguishing cells from empty droplets in droplet-based single-cell RNA sequencing data. Genome Biology 20:63 (barcodeRanks approach)",
+    "key": "knee",
+    "license_note": "Implemented from the publication; DropletUtils is GPL-3 and its source was not consulted.",
+    "name": "Knee and inflection of the barcode rank curve"
+   },
+   {
+    "citation": "Lun ATL et al. (2019) Genome Biology 20:63",
+    "key": "emptydrops",
+    "license_note": "Implemented from the publication; DropletUtils is GPL-3 and its source was not consulted.",
+    "name": "EmptyDrops cell calling"
+   },
+   {
+    "citation": "Traag VA, Waltman L, van Eck NJ (2019) From Louvain to Leiden. Scientific Reports 9:5233; Halko N, Martinsson PG, Tropp JA (2011) SIAM Review 53(2) (randomised SVD)",
+    "key": "embed",
+    "license_note": "Implemented from the publications; leidenalg and igraph are GPL and their sources were not consulted.",
+    "name": "Normalisation / HVG / PCA / kNN / SNN / Leiden clustering"
+   },
+   {
+    "citation": "Young MD, Behjati S (2020) SoupX removes ambient RNA contamination from droplet-based single-cell RNA sequencing data. GigaScience 9(12)",
+    "key": "soup",
+    "license_note": "Implemented from the publication; SoupX is GPL-2 and its source was not consulted.",
+    "name": "Ambient RNA estimator A: SoupX-style"
+   },
+   {
+    "citation": "Yang S et al. (2020) Decontamination of ambient RNA in single-cell RNA-seq with DecontX. Genome Biology 21:57",
+    "key": "decontx",
+    "license_note": "Implemented from the publication; celda is MIT-licensed and no code was copied.",
+    "name": "Ambient RNA estimator B: DecontX (background mode)"
+   },
+   {
+    "citation": "Caglayan E et al. (2022) Neuronal ambient RNA contamination causes misinterpreted and masked cell types in brain single-nuclei datasets. Neuron 110(24)",
+    "key": "mito",
+    "license_note": "Own implementation.",
+    "name": "Ambient RNA estimator C: mitochondrial method"
+   },
+   {
+    "citation": "Wang Q et al. (2024) A systematic assessment of ambient RNA contamination across 68,000 single-cell and single-nucleus samples (reference ranges: single-cell mean 7.79%, single-nucleus 11.80%)",
+    "key": "consensus",
+    "license_note": "Own implementation.",
+    "name": "Ambient RNA consistency verdict and correction recommendation"
+   },
+   {
+    "citation": "Young & Behjati (2020) (subtraction); Yang et al. (2020) (expected native counts)",
+    "key": "correct",
+    "license_note": "Own implementation.",
+    "name": "Ambient RNA correction (single method, optional)"
+   },
+   {
+    "citation": "Subramanian A et al. (2022) Biology-inspired data-driven quality control for scientific discovery in single-cell transcriptomics. Genome Biology 23:267",
+    "key": "ddqc",
+    "license_note": "Implemented from the publication; ddqc_R is BSD-3 and the ribosomal regular expression is aligned with it.",
+    "name": "Low-quality cell filtering: ddqc (data-driven QC)"
+   },
+   {
+    "citation": "Bais AS, Kostka D (2020) scds: computational annotation of doublets in single-cell RNA sequencing data. Bioinformatics 36(4):1150–1158",
+    "key": "cxds",
+    "license_note": "Implemented from the publication; scds is MIT-licensed.",
+    "name": "Doublet detection A: cxds"
+   },
+   {
+    "citation": "McGinnis CS, Murrow LM, Gartner ZJ (2019) DoubletFinder: Doublet Detection in Single-Cell RNA Sequencing Data Using Artificial Nearest Neighbors. Cell Systems 8(4):329–337",
+    "key": "doubletfinder",
+    "license_note": "Implemented from the publication; DoubletFinder is CC0.",
+    "name": "Doublet detection B: DoubletFinder"
+   }
+  ],
+  "version": "0.1.0"
+ },
+ "zh": {
+  "git_hash": "demo",
+  "lang": "zh",
+  "limitations_global": [
+   "QC 没有金标准，阈值选择存在主观性；本报告给出每一步的依据与被剔除细胞的原因，供人工复核。",
+   "环境 RNA 校正方法存在表达量偏倚（对高表达基因校正更强）；两个估计器建模对象不同，分歧有多种可能原因。",
+   "DecontX 对相似细胞群倾向保守、管家基因多判为原生、对聚类粒度敏感。",
+   "双细胞率缺乏共识估计方法；多重化 Flex 的修正为启发式。",
+   "Flex 平台缺乏环境 RNA 参考基准；Flex 探针集排除核糖体蛋白、ncRNA、TCR/IG、HLA/KIR 基因，基因宇宙与 GEX 不同。"
+  ],
+  "methods": [
+   {
+    "citation": "Lun ATL et al. (2019) EmptyDrops: distinguishing cells from empty droplets in droplet-based single-cell RNA sequencing data. Genome Biology 20:63 (barcodeRanks approach)",
+    "key": "knee",
+    "license_note": "依据论文自行实现（DropletUtils 为 GPL-3，未参考其源码）",
+    "name": "Barcode-rank 曲线的 knee / inflection"
+   },
+   {
+    "citation": "Lun ATL et al. (2019) Genome Biology 20:63",
+    "key": "emptydrops",
+    "license_note": "依据论文自行实现（DropletUtils 为 GPL-3，未参考其源码）",
+    "name": "EmptyDrops 真细胞鉴定"
+   },
+   {
+    "citation": "Traag VA, Waltman L, van Eck NJ (2019) From Louvain to Leiden. Scientific Reports 9:5233; Halko N, Martinsson PG, Tropp JA (2011) SIAM Review 53(2) (randomised SVD)",
+    "key": "embed",
+    "license_note": "依据论文自行实现（leidenalg / igraph 为 GPL，未参考其源码）",
+    "name": "归一化 / HVG / PCA / kNN / SNN / Leiden 聚类"
+   },
+   {
+    "citation": "Young MD, Behjati S (2020) SoupX removes ambient RNA contamination from droplet-based single-cell RNA sequencing data. GigaScience 9(12)",
+    "key": "soup",
+    "license_note": "依据论文自行实现（SoupX 为 GPL-2，未参考其源码）",
+    "name": "环境 RNA 估计器 A：SoupX 式"
+   },
+   {
+    "citation": "Yang S et al. (2020) Decontamination of ambient RNA in single-cell RNA-seq with DecontX. Genome Biology 21:57",
+    "key": "decontx",
+    "license_note": "依据论文自行实现（celda 为 MIT，本实现未复制其代码）",
+    "name": "环境 RNA 估计器 B：DecontX（background 模式）"
+   },
+   {
+    "citation": "Caglayan E et al. (2022) Neuronal ambient RNA contamination causes misinterpreted and masked cell types in brain single-nuclei datasets. Neuron 110(24)",
+    "key": "mito",
+    "license_note": "自行实现",
+    "name": "环境 RNA 估计器 C：线粒体法"
+   },
+   {
+    "citation": "Wang Q et al. (2024) A systematic assessment of ambient RNA contamination across 68,000 single-cell and single-nucleus samples (reference ranges: single-cell mean 7.79%, single-nucleus 11.80%)",
+    "key": "consensus",
+    "license_note": "自行实现",
+    "name": "环境 RNA 一致性判定与校正建议"
+   },
+   {
+    "citation": "Young & Behjati (2020) (subtraction); Yang et al. (2020) (expected native counts)",
+    "key": "correct",
+    "license_note": "自行实现",
+    "name": "环境 RNA 校正（单一方法，可选）"
+   },
+   {
+    "citation": "Subramanian A et al. (2022) Biology-inspired data-driven quality control for scientific discovery in single-cell transcriptomics. Genome Biology 23:267",
+    "key": "ddqc",
+    "license_note": "依据论文自行实现（ddqc_R 为 BSD-3；核糖体正则与之对齐）",
+    "name": "低质量细胞过滤：ddqc（数据驱动质控）"
+   },
+   {
+    "citation": "Bais AS, Kostka D (2020) scds: computational annotation of doublets in single-cell RNA sequencing data. Bioinformatics 36(4):1150–1158",
+    "key": "cxds",
+    "license_note": "依据论文自行实现（scds 为 MIT）",
+    "name": "双细胞检测 A：cxds"
+   },
+   {
+    "citation": "McGinnis CS, Murrow LM, Gartner ZJ (2019) DoubletFinder: Doublet Detection in Single-Cell RNA Sequencing Data Using Artificial Nearest Neighbors. Cell Systems 8(4):329–337",
+    "key": "doubletfinder",
+    "license_note": "依据论文自行实现（DoubletFinder 为 CC0）",
+    "name": "双细胞检测 B：DoubletFinder"
+   }
+  ],
+  "version": "0.1.0"
+ },
+ "ja": {
+  "git_hash": "demo",
+  "lang": "ja",
+  "limitations_global": [
+   "QC にゴールドスタンダードはなく、閾値の選択には主観が伴います。本レポートは各ステップの根拠と除外理由を示し、確認できるようにしています。",
+   "アンビエント RNA 補正は発現に偏りをもたらします（高発現遺伝子ほど強く補正されます）。2 つの推定器はモデル化の対象が異なるため、不一致には複数の原因がありえます。",
+   "DecontX は類似した集団に対して保守的で、ハウスキーピング遺伝子の多くを固有と判定し、クラスタリングの粒度に敏感です。",
+   "ダブレット率の推定に合意された手法はなく、多重化 Flex の補正はヒューリスティックです。",
+   "Flex アッセイにはアンビエント RNA の参照範囲がなく、プローブセットはリボソームタンパク質・ncRNA・TCR/IG・HLA/KIR 遺伝子を除外するため、フィーチャーの構成が全トランスクリプトームの遺伝子発現とは異なります。"
+  ],
+  "methods": [
+   {
+    "citation": "Lun ATL et al. (2019) EmptyDrops: distinguishing cells from empty droplets in droplet-based single-cell RNA sequencing data. Genome Biology 20:63 (barcodeRanks approach)",
+    "key": "knee",
+    "license_note": "論文に基づく独自実装（DropletUtils は GPL-3 のためソースは参照していません）",
+    "name": "バーコードランク曲線のニーと変曲点"
+   },
+   {
+    "citation": "Lun ATL et al. (2019) Genome Biology 20:63",
+    "key": "emptydrops",
+    "license_note": "論文に基づく独自実装（DropletUtils は GPL-3 のためソースは参照していません）",
+    "name": "EmptyDrops によるセルコーリング"
+   },
+   {
+    "citation": "Traag VA, Waltman L, van Eck NJ (2019) From Louvain to Leiden. Scientific Reports 9:5233; Halko N, Martinsson PG, Tropp JA (2011) SIAM Review 53(2) (randomised SVD)",
+    "key": "embed",
+    "license_note": "論文に基づく独自実装（leidenalg / igraph は GPL のためソースは参照していません）",
+    "name": "正規化 / HVG / PCA / kNN / SNN / Leiden クラスタリング"
+   },
+   {
+    "citation": "Young MD, Behjati S (2020) SoupX removes ambient RNA contamination from droplet-based single-cell RNA sequencing data. GigaScience 9(12)",
+    "key": "soup",
+    "license_note": "論文に基づく独自実装（SoupX は GPL-2 のためソースは参照していません）",
+    "name": "アンビエント RNA 推定器 A：SoupX 法"
+   },
+   {
+    "citation": "Yang S et al. (2020) Decontamination of ambient RNA in single-cell RNA-seq with DecontX. Genome Biology 21:57",
+    "key": "decontx",
+    "license_note": "論文に基づく独自実装（celda は MIT ライセンスですが、コードは複製していません）",
+    "name": "アンビエント RNA 推定器 B：DecontX（background モード）"
+   },
+   {
+    "citation": "Caglayan E et al. (2022) Neuronal ambient RNA contamination causes misinterpreted and masked cell types in brain single-nuclei datasets. Neuron 110(24)",
+    "key": "mito",
+    "license_note": "独自実装",
+    "name": "アンビエント RNA 推定器 C：ミトコンドリア法"
+   },
+   {
+    "citation": "Wang Q et al. (2024) A systematic assessment of ambient RNA contamination across 68,000 single-cell and single-nucleus samples (reference ranges: single-cell mean 7.79%, single-nucleus 11.80%)",
+    "key": "consensus",
+    "license_note": "独自実装",
+    "name": "アンビエント RNA の一致性判定と補正の推奨"
+   },
+   {
+    "citation": "Young & Behjati (2020) (subtraction); Yang et al. (2020) (expected native counts)",
+    "key": "correct",
+    "license_note": "独自実装",
+    "name": "アンビエント RNA 補正（単一手法、任意）"
+   },
+   {
+    "citation": "Subramanian A et al. (2022) Biology-inspired data-driven quality control for scientific discovery in single-cell transcriptomics. Genome Biology 23:267",
+    "key": "ddqc",
+    "license_note": "論文に基づく独自実装（ddqc_R は BSD-3。リボソームの正規表現はこれに合わせています）",
+    "name": "低品質細胞のフィルタリング：ddqc（データ駆動型 QC）"
+   },
+   {
+    "citation": "Bais AS, Kostka D (2020) scds: computational annotation of doublets in single-cell RNA sequencing data. Bioinformatics 36(4):1150–1158",
+    "key": "cxds",
+    "license_note": "論文に基づく独自実装（scds は MIT ライセンス）",
+    "name": "ダブレット検出 A：cxds"
+   },
+   {
+    "citation": "McGinnis CS, Murrow LM, Gartner ZJ (2019) DoubletFinder: Doublet Detection in Single-Cell RNA Sequencing Data Using Artificial Nearest Neighbors. Cell Systems 8(4):329–337",
+    "key": "doubletfinder",
+    "license_note": "論文に基づく独自実装（DoubletFinder は CC0）",
+    "name": "ダブレット検出 B：DoubletFinder"
+   }
+  ],
+  "version": "0.1.0"
+ }
+}
